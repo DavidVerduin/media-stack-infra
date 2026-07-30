@@ -1,0 +1,3 @@
+[submodule "control-panel"]
+	path = control-panel
+	url = git@github.com-controlpanel:DavidVerduin/media-stack-control-panel.git
