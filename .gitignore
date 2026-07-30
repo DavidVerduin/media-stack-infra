@@ -1,0 +1,12 @@
+.env
+*.log
+
+# Carpetas de datos/config reales de cada app — no son código, son estado
+# en ejecución (credenciales, bases de datos internas, cachés). No van al repo.
+bazarr/
+jellyfin/
+jellyseerr/
+prowlarr/
+qbittorrent/
+radarr/
+sonarr/
