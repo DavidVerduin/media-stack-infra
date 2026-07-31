@@ -132,7 +132,8 @@ services:
       - 5055:5055
     restart: unless-stopped
 
-  # --- Watchtower: mantiene todas las imágenes actualizadas automáticamente ---
+  # --- Watchtower: mantiene todas las imágenes actualizadas automáticamente,
+  #     incluyendo control-panel cuando el CI/CD publique una nueva versión ---
   watchtower:
     image: nickfedor/watchtower
     container_name: watchtower
@@ -141,6 +142,11 @@ services:
     environment:
       - WATCHTOWER_SCHEDULE=0 0 4 * * *
       - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_HTTP_API_UPDATE=true
+      - WATCHTOWER_HTTP_API_PERIODIC_POLLS=true   # mantiene también el chequeo nocturno normal
+      - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN}
+    ports:
+      - "8081:8080"   # 8080 ya lo usa gluetun/qbittorrent, por eso 8081 en el host
     restart: unless-stopped
 
   # --- Panel de control
@@ -149,6 +155,10 @@ services:
     container_name: control-panel
     env_file:
       - .env
+    environment:
+      - CONTROL_PANEL_IMAGE=ghcr.io/${GITHUB_REPO_USER}/${GITHUB_REPO_NAME}:latest
+      - WATCHTOWER_HOST=watchtower
+      - WATCHTOWER_PORT=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /mnt/storage:/storage:ro       # solo lectura, solo para medir espacio libre
