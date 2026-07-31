@@ -159,9 +159,11 @@ services:
       - CONTROL_PANEL_IMAGE=ghcr.io/${GITHUB_REPO_USER}/${GITHUB_REPO_NAME}:latest
       - WATCHTOWER_HOST=watchtower
       - WATCHTOWER_PORT=8080
+      - DOCKER_CONFIG_PATH=/docker-config/config.json
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /mnt/storage:/storage:ro       # solo lectura, solo para medir espacio libre
+      - ~/.docker/config.json:/docker-config/config.json:ro
     ports:
       - 4000:4000
     restart: unless-stopped
